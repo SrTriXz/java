@@ -1,3 +1,4 @@
+package proyecto_final;
 import java.util.Scanner;
 import java.text.DecimalFormat;
 

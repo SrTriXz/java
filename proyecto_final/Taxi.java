@@ -1,59 +1,55 @@
+package proyecto_final;
 import java.util.Scanner;
 import java.text.DecimalFormat;
+
 public class Taxi {
-    int pasajeros,kilometros,recorrido,pasajes,tpasajes;
-    double consumo_estandar,consumo;
+    int pasajeros, recorrido, pasajes, tpasajes;
+    double consumo_estandar, consumo;
     Scanner sc = new Scanner(System.in);
     DecimalFormat df = new DecimalFormat("#.###");
 
-    public Taxi(int pasajeros, int kilometros,double consumo_estandar,int recorrido,double consumo,int pasajes,int tpasajes){
-        this.pasajeros = pasajeros;
-        this.kilometros= kilometros;
-        this.consumo_estandar= consumo_estandar;
-        this.recorrido=recorrido;
-        this.consumo = consumo;
-        this.pasajes= pasajes;
-        this.tpasajes= tpasajes;
-
-        pasajeros=0;
-        kilometros=0;
-        consumo_estandar=0.02;
-        recorrido=45;
-        consumo=0;
-        pasajes=25000;
-        tpasajes =0;
+    public Taxi(int capacidad, int recorrido, double consumo_estandar, int pasajes) {
+        this.pasajeros = capacidad;
+        this.recorrido = recorrido;
+        this.consumo_estandar = consumo_estandar;
+        this.pasajes = pasajes;
+        this.tpasajes = 0;
     }
-    public void rangoPasajeros(){
-        System.out.println("cuantos pasajeros van a ir en taxi?");
-        pasajeros= sc.nextInt();
-        if ((pasajeros > 4)||(pasajeros<1)){
-            do {
-                System.out.print("cantidad de pasajeros no disponible, intentalo nuevamente: ");
-                pasajeros = sc.nextInt();
-            } while (!(pasajeros >= 1 && pasajeros <= 4));
-            
+
+    public void rangoPasajeros(int pasajerosRecogidos) {
+        if (pasajerosRecogidos < 1 || pasajerosRecogidos > pasajeros) {
+            System.out.println("La cantidad de pasajeros recogidos no es válida.");
+        } else {
+            pasajeros = pasajerosRecogidos;
         }
     }
-    public int calcularPasajes(){
-        tpasajes = pasajeros*pasajes;
-        System.out.println("el valor total de los pasajes es de:"+ tpasajes);
+
+    public int calcularPasajes() {
+        tpasajes = pasajeros * pasajes;
+        System.out.println("El valor total de los pasajes es de: " + tpasajes);
         return tpasajes;
     }
-    public double inicializarConsumo(){
-     consumo   = recorrido*consumo_estandar;
-     System.out.println(" el consumo estandar del vehículo es de: "+ consumo);
-     return consumo;
 
-    }
-    public double agregarconsumoPasajeros(){
-
-        double extra_pasajero,extra;
-        extra_pasajero = 0.02;
-        extra= consumo*(pasajeros * extra_pasajero);
-        consumo += extra;
-        System.out.println("el consumo extra por los pasajeros es de " + df.format(extra) + " el consumo total sin cambios es de "+ df.format(consumo));
+    public double inicializarConsumo() {
+        consumo = recorrido * consumo_estandar;
+        System.out.println("El consumo estándar del vehículo es de: " + df.format(consumo));
         return consumo;
     }
+
+    public double agregarConsumoPasajeros() {
+        double extra_pasajero, extra;
+        extra_pasajero = 0.02;
+        extra = consumo * (pasajeros * extra_pasajero);
+        consumo += extra;
+        System.out.println("El consumo extra por los pasajeros es de " + df.format(extra) + ". El consumo total sin cambios es de " + df.format(consumo));
+        return consumo;
+    }
+
+    public double getConsumo() {
+        return consumo;
+    }
+}
+
 /*el siguiente metodo calcula el consumo añadido por los cambios,este va en el main, puesto que es un metod que lo requieren todos los vehículos 
     este metodo recibe el siguiente atributo: consumo(el total del consumo estandar mas el consumo adicional por pasajero),
     public double agregarconsumoCambios(){
