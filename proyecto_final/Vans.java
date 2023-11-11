@@ -19,13 +19,7 @@ public class Vans {
         
     }
 
-    public void rangoPasajeros(int pasajerosRecogidos) {
-        if (pasajerosRecogidos < 1 || pasajerosRecogidos > pasajeros) {
-            System.out.println("La cantidad de pasajeros recogidos no es válida.");
-        } else {
-            pasajeros = pasajerosRecogidos;
-        }
-    }
+    
 
     public int calcularPasajes() {
         tpasajes = pasajeros * pasajes;
@@ -47,6 +41,32 @@ public class Vans {
         System.out.println("El consumo extra por los pasajeros es de " + df.format(extra) + ". El consumo total sin cambios es de " + df.format(consumo));
         return consumo;
     }
+        public double agregarConsumoCambios(){
+     double pcambios =0,consumo_kilometro,consumo_cambio;
+     
+        switch (cambios) {
+            case 1:
+            pcambios= 0.03;
+            break;
+            case 2:
+            pcambios = 0.02;
+            break;
+            case 3: 
+            pcambios =0.01;
+            break;
+            default:
+            System.out.println("Opción no válida.");
+            break;
+    }
+        
+            consumo_kilometro= kilometros*consumo_estandar;
+            consumo_cambio = consumo_kilometro*pcambios;
+            consumo+= consumo_cambio; 
+
+           
+        return consumo;
+    }
+
 
     public double getConsumo() {
         return consumo;

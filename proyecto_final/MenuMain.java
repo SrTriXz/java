@@ -1,8 +1,8 @@
 package proyecto_final;
+import java.util.Scanner;
+import proyecto_final.Taxi;
 import proyecto_final.Vans;
 import proyecto_final.Microbus;
-import proyecto_final.Taxi;
-import java.util.Scanner;
 import java.text.DecimalFormat;
 
 public class MenuMain {
@@ -29,8 +29,11 @@ public class MenuMain {
                 do {
                     System.out.print("¿Cuántas personas recogió en todo el viaje? ");
                     pasajerosRecogidosVan = sc.nextInt();
+                    if (pasajerosRecogidosVan < 1 || pasajerosRecogidosVan > 10) {
+                        System.out.println("Cantidad de pasajeros no es válida");
+                    }
                 } while (pasajerosRecogidosVan < 0 || pasajerosRecogidosVan > 10);
-                van.rangoPasajeros(pasajerosRecogidosVan);
+
                 van.calcularPasajes();
                 van.inicializarConsumo();
                 if (trayecto == 1) {
@@ -41,12 +44,33 @@ public class MenuMain {
 
             case 2:
                 Microbus microbus = new Microbus(15, 45, 0.033, 12000);
-                int pasajerosRecogidosMicrobus;
-                do {
-                    System.out.print("¿Cuántas personas recogió en todo el viaje? ");
-                    pasajerosRecogidosMicrobus = sc.nextInt();
-                } while (pasajerosRecogidosMicrobus < 0 || pasajerosRecogidosMicrobus > 15);
-                microbus.rangoPasajeros(pasajerosRecogidosMicrobus);
+                int kilometroMicrobus = 0;
+                int pasajerosRecogidosMicrobus = 0;
+
+                while (kilometroMicrobus <= 45 && pasajerosRecogidosMicrobus < 15) {
+                    System.out.print("¿En qué kilómetro se encuentra? ");
+                    kilometroMicrobus = sc.nextInt();
+
+                    if (kilometroMicrobus > 45) {
+                        System.out.println("Kilómetro no válido. Máximo permitido: 45");
+                        continue;
+                    }
+
+                    System.out.print("¿Va a recoger pasajeros? (1: Sí, 2: No) ");
+                    int recogerPasajeros = sc.nextInt();
+
+                    if (recogerPasajeros == 1) {
+                        System.out.print("¿Cuántos pasajeros va a recoger? ");
+                        int pasajeros = sc.nextInt();
+
+                        if (pasajeros > 0 && pasajerosRecogidosMicrobus + pasajeros <= 15) {
+                            pasajerosRecogidosMicrobus += pasajeros;
+                        } else {
+                            System.out.println("Cantidad de pasajeros no válida. Capacidad máxima: 15");
+                        }
+                    }
+                }
+
                 microbus.calcularPasajes();
                 microbus.inicializarConsumo();
                 if (trayecto == 1) {
@@ -57,12 +81,33 @@ public class MenuMain {
 
             case 3:
                 Taxi taxi = new Taxi(4, 45, 0.02, 25000);
-                int pasajerosRecogidosTaxi;
-                do {
-                    System.out.print("¿Cuántas personas recogió en todo el viaje? ");
-                    pasajerosRecogidosTaxi = sc.nextInt();
-                } while (pasajerosRecogidosTaxi < 0 || pasajerosRecogidosTaxi > 4);
-                taxi.rangoPasajeros(pasajerosRecogidosTaxi);
+                int kilometroTaxi = 0;
+                int pasajerosRecogidosTaxi = 0;
+
+                while (kilometroTaxi <= 45 && pasajerosRecogidosTaxi < 4) {
+                    System.out.print("¿En qué kilómetro se encuentra? ");
+                    kilometroTaxi = sc.nextInt();
+
+                    if (kilometroTaxi > 45) {
+                        System.out.println("Kilómetro no válido. Máximo permitido: 45");
+                        continue;
+                    }
+
+                    System.out.print("¿Va a recoger pasajeros? (1: Sí, 2: No) ");
+                    int recogerPasajeros = sc.nextInt();
+
+                    if (recogerPasajeros == 1) {
+                        System.out.print("¿Cuántos pasajeros va a recoger? ");
+                        int pasajeros = sc.nextInt();
+
+                        if (pasajeros > 0 && pasajerosRecogidosTaxi + pasajeros <= 4) {
+                            pasajerosRecogidosTaxi += pasajeros;
+                        } else {
+                            System.out.println("Cantidad de pasajeros no válida. Capacidad máxima: 4");
+                        }
+                    }
+                }
+
                 taxi.calcularPasajes();
                 taxi.inicializarConsumo();
                 if (trayecto == 1) {
