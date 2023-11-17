@@ -3,8 +3,8 @@ import java.util.Scanner;
 import java.text.DecimalFormat;
 
 public class Microbus {
-    int pasajeros, recorrido, pasajes, tpasajes;
-    double consumo_estandar, consumo;
+    int pasajeros,i, recorrido, pasajes, tpasajes, cambios, kilometros = 0,galones;
+    double consumo_estandar, consumo,costo_galon;
     Scanner sc = new Scanner(System.in);
     DecimalFormat df = new DecimalFormat("#.###");
 
@@ -15,37 +15,105 @@ public class Microbus {
         this.pasajes = pasajes;
         this.tpasajes = 0;
     }
-
-    public void rangoPasajeros(int pasajerosRecogidos) {
-        if (pasajerosRecogidos < 1 || pasajerosRecogidos > pasajeros) {
-            System.out.println("La cantidad de pasajeros recogidos no es válida.");
-        } else {
-            pasajeros = pasajerosRecogidos;
+    public void rangoPasajeros() {
+        System.out.println("¿Cuántos pasajeros van desde la terminal?");
+        pasajeros = sc.nextInt();
+        if (pasajeros < 0 || pasajeros > 15) {
+            do {
+                System.out.print("Cantidad de pasajeros no disponible, inténtalo nuevamente: ");
+                pasajeros = sc.nextInt();
+            } while (!(pasajeros >= 0 && pasajeros <= 15));
         }
-    }
+        System.out.println("cuantos pasajeros se montaron durante el recorrido?");
+        i= sc.nextInt();
+        //verificar que no se pase del limite
+        if (pasajeros+i> 15){
+             do {
+                System.out.print("la cantidad de pasajeros sobrepasó el límite de cupos del vehículo, inténtalo nuevamente: ");
+                i = sc.nextInt();
+            } while (!(pasajeros+i<=15));
+            
+        }
 
+    }
     public int calcularPasajes() {
-        tpasajes = pasajeros * pasajes;
-        System.out.println("El valor total de los pasajes es de: " + tpasajes);
+        tpasajes = (pasajeros+i) * pasajes;
+        
         return tpasajes;
     }
-
     public double inicializarConsumo() {
         consumo = recorrido * consumo_estandar;
-        System.out.println("El consumo estándar del vehículo es de: " + df.format(consumo));
         return consumo;
     }
-
     public double agregarConsumoPasajeros() {
-        double extra_pasajero, extra;
-        extra_pasajero = 0.04;
-        extra = consumo * (pasajeros * extra_pasajero);
-        consumo += extra;
-        System.out.println("El consumo extra por los pasajeros es de " + df.format(extra) + ". El consumo total sin cambios es de " + df.format(consumo));
+        double extra_pasajero = 0.04, extra,consumo_estandar_distancia;
+        int camino=0,k,distancia;
+        double tpasajero=0;
+        //personas recogidas en el transcurso del camino
+        extra= consumo * pasajeros * extra_pasajero;//el consumo esta en 1,8
+        consumo+=extra;
+   
+        while(camino<i){
+            System.out.println("en que kilometro se subió el pasajero " + (camino+1) +"?");
+            k= sc.nextInt();
+             if (k> 45){
+             do {
+                System.out.print("kilómetro fuera del límite, inténtalo nuevamente: ");
+                k= sc.nextInt();
+            } while (!(k<45));
+        }
+            distancia = 45-k;
+            consumo_estandar_distancia= (distancia*consumo_estandar)*0.04;
+            tpasajero+=consumo_estandar_distancia;
+            camino++;
+        }
+        System.out.println("el consumo extra por los pasajeros de camino es de " +df.format(tpasajero));
+        System.out.println("el total de pasajeros fueron "+ (pasajeros+i) );
+        consumo += tpasajero;
+        System.out.println("El consumo total sin cambios es de " + df.format(consumo)+" galones.");
         return consumo;
     }
+    public double agregarConsumoCambios() {
+        int i=0,x=0,y=0,z=0;
+        double c1,c2,c3,pc;
 
+        while(i<1){
+        System.out.println("durante cuantos kilometros estuvo en primera?");
+        x = sc.nextInt();
+         System.out.println("durante cuantos kilometros estuvo en segunda?");
+        y = sc.nextInt();
+         System.out.println("durante cuantos kilometros estuvo en tercera?");
+        z = sc.nextInt();
+        if(x+y+z > 45 || x < 0  || y<0 || z <0){
+            System.out.println("has ingresado mal los kilometros,intentalo nuevamente");
+        }
+        else {
+            i+=1;
+        }
+        }
+        c1= consumo_estandar*x*0.03;
+        c2= consumo_estandar*y*0.02;
+        c3= consumo_estandar*z*0.01;
+        pc=consumo*(c1+c2+c3);
+        System.out.println("el consumo por cambios es "+ df.format(pc));
+        consumo +=pc;
+        return consumo;
+
+    }  
     public double getConsumo() {
         return consumo;
+    }
+    public double calcularCostoGalones(){
+        costo_galon =  consumo*16000;
+        System.out.println("el costo total de los galones requeridos es de $"+ df.format(costo_galon));
+        return costo_galon;
+    }
+    public void calcularRentabilidad(){
+        double rentabilidad;
+        double ingreso,gasto;
+        ingreso=tpasajes;
+        gasto=costo_galon;
+        rentabilidad= ingreso-gasto;
+        System.out.println("la rentabilidad del viaje fue de $"+Math.round(rentabilidad));
     }
 }

@@ -1,13 +1,15 @@
 package proyecto_final;
-import java.util.Scanner;
 import proyecto_final.Taxi;
 import proyecto_final.Vans;
 import proyecto_final.Microbus;
+import java.text.DecimalFormat;
+import java.util.Scanner;
 import java.text.DecimalFormat;
 
 public class MenuMain {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        DecimalFormat df = new DecimalFormat("#.###");
 
         int opcion;
         System.out.println("Seleccione el tipo de vehículo:");
@@ -21,101 +23,56 @@ public class MenuMain {
         System.out.println("1. Medellín a Rionegro");
         System.out.println("2. Rionegro a Medellín");
         trayecto = sc.nextInt();
+        
 
         switch (opcion) {
             case 1:
-                Vans van = new Vans(10, 45, 0.04, 15000);
-                int pasajerosRecogidosVan;
-                do {
-                    System.out.print("¿Cuántas personas recogió en todo el viaje? ");
-                    pasajerosRecogidosVan = sc.nextInt();
-                    if (pasajerosRecogidosVan < 1 || pasajerosRecogidosVan > 10) {
-                        System.out.println("Cantidad de pasajeros no es válida");
-                    }
-                } while (pasajerosRecogidosVan < 0 || pasajerosRecogidosVan > 10);
-
+                Vans van = new Vans(10, 45, 0.03166666667, 15000,0);
+                van.rangoPasajeros();
                 van.calcularPasajes();
                 van.inicializarConsumo();
+                double estandar = van.inicializarConsumo();
                 if (trayecto == 1) {
                     van.agregarConsumoPasajeros();
+                    van.agregarConsumoCambios(); 
                 }
-                System.out.println("Gasto total de gasolina: " + van.getConsumo());
+                System.out.println("El valor total de los pasajes es de: " + van.tpasajes);
+                System.out.println("El consumo estándar del vehículo es de: " + df.format(estandar)+ " galones");
+                van.calcularCostoGalones();
+                van.calcularRentabilidad();
                 break;
 
             case 2:
-                Microbus microbus = new Microbus(15, 45, 0.033, 12000);
-                int kilometroMicrobus = 0;
-                int pasajerosRecogidosMicrobus = 0;
-
-                while (kilometroMicrobus <= 45 && pasajerosRecogidosMicrobus < 15) {
-                    System.out.print("¿En qué kilómetro se encuentra? ");
-                    kilometroMicrobus = sc.nextInt();
-
-                    if (kilometroMicrobus > 45) {
-                        System.out.println("Kilómetro no válido. Máximo permitido: 45");
-                        continue;
-                    }
-
-                    System.out.print("¿Va a recoger pasajeros? (1: Sí, 2: No) ");
-                    int recogerPasajeros = sc.nextInt();
-
-                    if (recogerPasajeros == 1) {
-                        System.out.print("¿Cuántos pasajeros va a recoger? ");
-                        int pasajeros = sc.nextInt();
-
-                        if (pasajeros > 0 && pasajerosRecogidosMicrobus + pasajeros <= 15) {
-                            pasajerosRecogidosMicrobus += pasajeros;
-                        } else {
-                            System.out.println("Cantidad de pasajeros no válida. Capacidad máxima: 15");
-                        }
-                    }
-                }
-
+                Microbus microbus = new Microbus(15, 45, 0.03, 12000);
+                microbus.rangoPasajeros();
                 microbus.calcularPasajes();
                 microbus.inicializarConsumo();
+                double estandarm = microbus.inicializarConsumo();
                 if (trayecto == 1) {
                     microbus.agregarConsumoPasajeros();
+                    microbus.agregarConsumoCambios(); 
                 }
-                System.out.println("Gasto total de gasolina: " + microbus.getConsumo());
+                System.out.println("El valor total de los pasajes es de: " + microbus.tpasajes);
+                System.out.println("El consumo estándar del vehículo es de: " + df.format(estandarm)+ " galones");
+                microbus.calcularCostoGalones();
+                microbus.calcularRentabilidad();
                 break;
 
             case 3:
-                Taxi taxi = new Taxi(4, 45, 0.02, 25000);
-                int kilometroTaxi = 0;
-                int pasajerosRecogidosTaxi = 0;
-
-                while (kilometroTaxi <= 45 && pasajerosRecogidosTaxi < 4) {
-                    System.out.print("¿En qué kilómetro se encuentra? ");
-                    kilometroTaxi = sc.nextInt();
-
-                    if (kilometroTaxi > 45) {
-                        System.out.println("Kilómetro no válido. Máximo permitido: 45");
-                        continue;
-                    }
-
-                    System.out.print("¿Va a recoger pasajeros? (1: Sí, 2: No) ");
-                    int recogerPasajeros = sc.nextInt();
-
-                    if (recogerPasajeros == 1) {
-                        System.out.print("¿Cuántos pasajeros va a recoger? ");
-                        int pasajeros = sc.nextInt();
-
-                        if (pasajeros > 0 && pasajerosRecogidosTaxi + pasajeros <= 4) {
-                            pasajerosRecogidosTaxi += pasajeros;
-                        } else {
-                            System.out.println("Cantidad de pasajeros no válida. Capacidad máxima: 4");
-                        }
-                    }
-                }
-
+                Taxi taxi = new Taxi(4, 45, 0.02177777778, 25000);
+                taxi.rangoPasajeros();
                 taxi.calcularPasajes();
                 taxi.inicializarConsumo();
+                double estandart = taxi.inicializarConsumo();
                 if (trayecto == 1) {
-                    taxi.agregarConsumoPasajeros();
+                    taxi.agregarconsumoPasajeros();
+                    taxi.agregarConsumoCambios(); 
                 }
-                System.out.println("Gasto total de gasolina: " + taxi.getConsumo());
+                System.out.println("El valor total de los pasajes es de: " + taxi.tpasajes);
+                System.out.println("El consumo estándar del vehículo es de: " + df.format(estandart)+ " galones");
+                taxi.calcularCostoGalones();
+                taxi.calcularRentabilidad();
                 break;
-
             default:
                 System.out.println("Opción no válida.");
                 break;
